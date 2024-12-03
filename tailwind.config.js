@@ -27,6 +27,9 @@ module.exports = {
         about: "url('./assets/about.png')",
         services: "url('./assets/services.png')",
       },
+      boxShadow: {
+        'inner-blue': 'inset 0 2px 4px 0 rgba(0, 0, 255, 0.25)',
+      },
     },
   },
   plugins: [],

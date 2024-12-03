@@ -6,22 +6,33 @@ import { fadeIn } from "../variants";
 
 const Services = () => {
   const [skillsState, setSkillsState] = useState(skills);
+  const [activeIndex, setActiveIndex] = useState(0);
 
+  // Pergeseran elemen
   useEffect(() => {
     const interval = setInterval(() => {
       setSkillsState((prevSkills) => {
-        const lastSkill = prevSkills[prevSkills.length - 1]; // Ambil elemen terakhir
-        const newSkills = [lastSkill, ...prevSkills.slice(0, -1)]; // Geser elemen terakhir ke awal
+        const lastSkill = prevSkills[prevSkills.length - 1];
+        const newSkills = [lastSkill, ...prevSkills.slice(0, -1)];
         return newSkills;
       });
-    }, 2000); // Interval waktu animasi
+    }, 2000); // Interval pergeseran skill
     return () => clearInterval(interval);
   }, []);
+
+  // Nyala satu-satu
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((prevIndex) => (prevIndex + 1) % skillsState.length);
+    }, 500); // Interval highlight skill
+    return () => clearInterval(interval);
+  }, [skillsState]);
 
   return (
     <section id="services" className="section">
       <div className="container mx-auto">
         <div className="flex-col">
+          {/* Header Section */}
           <motion.div
             variants={fadeIn("left", 0.45)}
             initial="hidden"
@@ -37,6 +48,8 @@ const Services = () => {
               measure as priority.
             </p>
           </motion.div>
+
+          {/* Services Section */}
           <motion.div
             variants={fadeIn("right", 0.45)}
             initial="hidden"
@@ -44,8 +57,8 @@ const Services = () => {
             viewport={{ once: false, amount: 0.7 }}
             className="flex lg:flex-row flex-col items-center justify-center px-5 lg:gap-4 gap-12 mb-10"
           >
-            <div className="border-2 border-indigo-800 rounded-xl p-6 flex flex-col items-center justify-center w-[280px] h-64 relative">
-              <div className="p-1 absolute bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full -top-8">
+            <div className="border-2 border-indigo-800 rounded-xl p-6 flex flex-col items-center justify-center w-[280px] h-64 relative hover:shadow-lg hover:shadow-blue-800 transition-shadow duration-300">
+              <div className="p-1 absolute bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full -top-8 shadow-blue-800">
                 <div className="flex bg-violet-800/50 w-16 h-16 rounded-full items-center justify-center">
                   <img src={webIcon} alt="" className="w-8 h-8" />
                 </div>
@@ -56,7 +69,7 @@ const Services = () => {
                 your marketing specially with Laravel and React.
               </p>
             </div>
-            <div className="border-2 border-indigo-800 rounded-xl p-6 flex flex-col items-center justify-center w-[280px] h-64 relative">
+            <div className="border-2 border-indigo-800 rounded-xl p-6 flex flex-col items-center justify-center w-[280px] h-64 relative hover:shadow-lg hover:shadow-blue-800 transition-shadow duration-300">
               <div className="p-1 absolute bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full -top-8">
                 <div className="flex bg-violet-800/50 w-16 h-16 rounded-full items-center justify-center">
                   <img src={designIcon} alt="" className="w-8 h-8" />
@@ -69,7 +82,8 @@ const Services = () => {
               </p>
             </div>
           </motion.div>
-          {/* // Skill Section */}
+
+          {/* Skill Section */}
           <motion.div
             variants={fadeIn("left", 0.45)}
             initial="hidden"
@@ -83,7 +97,9 @@ const Services = () => {
                 {skillsState.map((skill, index) => (
                   <motion.div
                     key={skill.name}
-                    className="flex items-center justify-center rounded-full bg-slate-800 h-10 w-10"
+                    className={`flex items-center justify-center rounded-full bg-slate-800 h-10 w-10 shadow-xl transition-shadow duration-500 ${
+                      index === activeIndex ? "shadow-blue-800/50" : ""
+                    }`}
                     layout
                     transition={{ duration: 0.5 }}
                   >
